@@ -1,6 +1,8 @@
 # smartos-nfs-backup
 Bash script to backup all your smartos (kvm) VMs to a nfs share
 
+WIP: NOT READY FOR PRODUCTION (alpha)
+
 Be aware:
 - Script enables (and disable!) automount on your smartos machine.
 - Does not backup your smartos zones
