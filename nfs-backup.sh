@@ -4,7 +4,9 @@
 # Original Author:  russell@ballestrini.net http://russell.ballestrini.net/
 # Author: Yourcoke 
 # E-Mail: deinkoks@gmail.com
+# Version 0.11
 # This Version does not use vmadm send but use zfs send instead
+
 
 # Backup directory without trailing slash
 backupdir=/net/HOSTNAMEorIP/backups/smartos/vms
@@ -26,13 +28,15 @@ for VM in `vmadm list -p -o alias,uuid`
     vmadm get $uuid > $backupdir/$alias-$uuid.json
     #vmadm send $uuid > $tmpdir/$alias
     IFS=$'\n'
+    i=0
     for disk in `vmadm get ${VM_PARTS[1]}| json disks | grep zfs_filesystem | awk -F \" '{printf "%s@backup\n", $4}'`
     do
         if [[ $disk == *@* ]]
         then
             zfs snapshot $disk
-            zfs send $disk > $backupdir/$alias-$uuid.zfs
+            zfs send $disk > $backupdir/$alias-$uuid-disk$i.zfs
             zfs destroy -r $disk
+            ((i++))
         fi
     done
 
